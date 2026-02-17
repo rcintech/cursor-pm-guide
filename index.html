@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursor for Product Managers — Interactive Training Guide</title>
+<style>
+  :root {
+    --primary: #6C5CE7;
+    --primary-light: #A29BFE;
+    --primary-dark: #4A3DB5;
+    --accent: #00CEC9;
+    --accent-dark: #00A8A3;
+    --warm: #FDCB6E;
+    --warm-dark: #E17055;
+    --bg: #F8F9FD;
+    --card: #FFFFFF;
+    --text: #2D3436;
+    --text-light: #636E72;
+    --border: #E8EAF0;
+    --success: #00B894;
+    --danger: #FF7675;
+    --code-bg: #1E1E2E;
+    --code-text: #CDD6F4;
+    --shadow: 0 4px 24px rgba(108,92,231,0.08);
+    --shadow-hover: 0 8px 32px rgba(108,92,231,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    background: linear-gradient(135deg, #6C5CE7 0%, #4A3DB5 40%, #2D1B69 100%);
+    color: white;
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(0,206,201,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(253,203,110,0.1) 0%, transparent 40%);
+    animation: shimmer 15s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-5%, 5%); }
+  }
+  .hero > * { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    opacity: 0.9;
+    max-width: 640px;
+    margin: 0 auto 32px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ─── Navigation ─── */
+  .nav {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 14px 18px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--primary); }
+  .nav-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+  /* ─── Container ─── */
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ─── Module Section ─── */
+  .module {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .module.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .module-header {
+    margin-bottom: 40px;
+  }
+  .module-number {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    text-align: center;
+    line-height: 48px;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+  .module-header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .module-header p {
+    font-size: 1.05rem;
+    color: var(--text-light);
+  }
+
+  /* ─── Cards ─── */
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.3s;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); }
+  .card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h3 .icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .card p, .card li { margin-bottom: 12px; }
+  .card ul, .card ol { padding-left: 24px; }
+
+  /* ─── Special Cards ─── */
+  .card-concept { border-left: 4px solid var(--primary); }
+  .card-concept .icon { background: #EDE9FE; }
+
+  .card-example { border-left: 4px solid var(--accent); }
+  .card-example .icon { background: #E0FAF9; }
+
+  .card-exercise { border-left: 4px solid var(--warm); }
+  .card-exercise .icon { background: #FEF3D0; }
+
+  .card-adventure { border-left: 4px solid var(--warm-dark); background: linear-gradient(135deg, #FFF8F0, #FFFFFF); }
+  .card-adventure .icon { background: #FDDEDE; }
+
+  .card-tip { border-left: 4px solid var(--success); }
+  .card-tip .icon { background: #D4F5ED; }
+
+  .card-warning { border-left: 4px solid var(--danger); }
+  .card-warning .icon { background: #FFE0E0; }
+
+  .card-keyboard { border-left: 4px solid #636E72; }
+  .card-keyboard .icon { background: #E8EAEE; }
+
+  /* ─── Inline Code & KBD ─── */
+  code {
+    background: #F0EDFE;
+    color: var(--primary-dark);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  }
+  kbd {
+    display: inline-block;
+    background: #F4F4F7;
+    border: 1px solid #D1D5DB;
+    border-bottom: 3px solid #C7CBD1;
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 13px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* ─── Code Block ─── */
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--code-text);
+    position: relative;
+  }
+  .code-block .label {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 11px;
+    color: #7F849C;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .code-comment { color: #6C7086; }
+  .code-keyword { color: #CBA6F7; }
+  .code-string { color: #A6E3A1; }
+  .code-function { color: #89B4FA; }
+
+  /* ─── Diagram / Visual ─── */
+  .diagram {
+    background: white;
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .diagram-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+  }
+  .flow-box {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    min-width: 120px;
+  }
+  .flow-box.alt {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  }
+  .flow-box.warm {
+    background: linear-gradient(135deg, var(--warm), var(--warm-dark));
+    color: var(--text);
+  }
+  .flow-arrow {
+    font-size: 22px;
+    color: var(--text-light);
+  }
+
+  /* ─── Comparison Table ─── */
+  .comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .comparison-table th {
+    background: var(--primary);
+    color: white;
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .comparison-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .comparison-table tr:nth-child(even) td { background: #FAFBFE; }
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  /* ─── Shortcut Grid ─── */
+  .shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .shortcut-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #F8F9FD;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .shortcut-item kbd { flex-shrink: 0; }
+  .shortcut-desc { font-size: 13px; color: var(--text-light); }
+
+  /* ─── Progress Tracker ─── */
+  .progress-bar-wrapper {
+    background: rgba(255,255,255,0.2);
+    border-radius: 50px;
+    height: 8px;
+    width: 300px;
+    max-width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 50px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ─── Checklist ─── */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 14px;
+    color: transparent;
+  }
+  .checklist li.checked .check-box {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+  }
+  .checklist li.checked span {
+    text-decoration: line-through;
+    color: var(--text-light);
+  }
+
+  /* ─── Collapsible ─── */
+  .collapsible {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+  .collapsible-header {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .collapsible-header:hover { background: #F8F9FD; }
+  .collapsible-arrow { transition: transform 0.3s; font-size: 12px; }
+  .collapsible.open .collapsible-arrow { transform: rotate(180deg); }
+  .collapsible-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding: 0 20px;
+  }
+  .collapsible.open .collapsible-body {
+    max-height: 2000px;
+    padding: 0 20px 20px;
+  }
+
+  /* ─── Scenario Simulator ─── */
+  .simulator {
+    background: linear-gradient(135deg, #1E1E2E, #2A2A3E);
+    border-radius: 16px;
+    padding: 32px;
+    color: var(--code-text);
+    margin: 24px 0;
+  }
+  .simulator-title {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+  .simulator-prompt {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .simulator-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .simulator-label.you { color: var(--accent); }
+  .simulator-label.cursor { color: var(--primary-light); }
+
+  /* ─── Quiz ─── */
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 14px 18px;
+    margin: 8px 0;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .quiz-option:hover { border-color: var(--primary-light); background: #F8F6FF; }
+  .quiz-option.correct { border-color: var(--success); background: #E6FAF3; }
+  .quiz-option.incorrect { border-color: var(--danger); background: #FFF0F0; }
+  .quiz-feedback {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-top: 12px;
+    display: none;
+    font-size: 14px;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #E6FAF3; color: #00866A; }
+  .quiz-feedback.incorrect { background: #FFF0F0; color: #C0392B; }
+
+  /* ─── Timeline ─── */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+    border-radius: 3px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+    padding-left: 20px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid var(--bg);
+  }
+  .timeline-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .timeline-item p { font-size: 14px; color: var(--text-light); }
+
+  /* ─── Footer ─── */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-light);
+    font-size: 14px;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 20px 40px; }
+    .container { padding: 24px 16px 60px; }
+    .card { padding: 20px; }
+    .shortcut-grid { grid-template-columns: 1fr; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<div class="hero">
+  <div class="hero-badge">Interactive Training Guide</div>
+  <h1>Cursor for Product Managers</h1>
+  <p>Go from "what is this code editor?" to building prototypes, reading codebases, and becoming an AI-native PM — no computer science degree required.</p>
+  <div class="hero-meta">
+    <span>&#128218; 7 Modules</span>
+    <span>&#9201; ~3 Hours</span>
+    <span>&#127891; 12 Exercises</span>
+    <span>&#9968; 5 Adventures</span>
+  </div>
+  <div style="margin-top: 28px;">
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div style="font-size:13px; opacity:0.7; margin-top:8px;" id="progressText">Module 1 of 7</div>
+  </div>
+</div>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showModule(0)">1. What is Cursor?</button>
+    <button class="nav-btn" onclick="showModule(1)">2. Setup & First Steps</button>
+    <button class="nav-btn" onclick="showModule(2)">3. Core Features</button>
+    <button class="nav-btn" onclick="showModule(3)">4. PM Workflows</button>
+    <button class="nav-btn" onclick="showModule(4)">5. Building Things</button>
+    <button class="nav-btn" onclick="showModule(5)">6. Advanced Moves</button>
+    <button class="nav-btn" onclick="showModule(6)">7. AI PM Playbook</button>
+  </div>
+</div>
+
+<!-- ══════════════════════ CONTENT ══════════════════════ -->
+<div class="container">
+
+<!-- ═══════════════ MODULE 1: WHAT IS CURSOR? ═══════════════ -->
+<div class="module active" id="module-0">
+  <div class="module-header">
+    <div class="module-number">1</div>
+    <h2>What is Cursor?</h2>
+    <p>Understand the tool, why it matters, and why PMs should care</p>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128161;</span> The 30-Second Pitch</h3>
+    <p>Cursor is an <strong>AI-powered code editor</strong> built on top of VS Code. Think of it as Google Docs for code — except your co-author is an AI that understands your entire project, can write code from plain English, and edits multiple files at once.</p>
+    <p>It was built by <strong>Anysphere</strong>, has crossed <strong>1 million daily developers</strong>, and is valued at ~$29B. It's the fastest-growing developer tool in history.</p>
+    <p><strong>Why should a PM care?</strong> Because Cursor collapses the distance between "I want this feature" and "here's a working prototype." It's the tool that makes the AI PM possible.</p>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">How Cursor Is Different From ChatGPT</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; text-align: left; max-width: 700px; margin: 0 auto;">
+      <div style="padding: 20px; background: #F8F6FF; border-radius: 12px; border: 1px solid #E8E4F8;">
+        <div style="font-weight: 700; color: var(--primary); margin-bottom: 8px;">&#128172; ChatGPT / Claude Chat</div>
+        <ul style="font-size: 14px; color: var(--text-light); padding-left: 18px;">
+          <li>You copy-paste code snippets</li>
+          <li>AI sees only what you share</li>
+          <li>You manually apply changes</li>
+          <li>One conversation at a time</li>
+        </ul>
+      </div>
+      <div style="padding: 20px; background: #E8FBF9; border-radius: 12px; border: 1px solid #C5F0EC;">
+        <div style="font-weight: 700; color: var(--accent-dark); margin-bottom: 8px;">&#9889; Cursor</div>
+        <ul style="font-size: 14px; color: var(--text-light); padding-left: 18px;">
+          <li>AI lives <em>inside</em> your project files</li>
+          <li>AI sees your <em>entire</em> codebase</li>
+          <li>AI edits files directly for you</li>
+          <li>Multi-file, multi-step operations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128640;</span> The Mental Model: Cursor as Your Engineering Intern</h3>
+    <p>Here's the best way to think about Cursor as a PM:</p>
+    <p>Imagine you hired a very fast, very knowledgeable junior engineer who sits inside your project files. They can read every file in the project, understand how things connect, and make changes when you describe what you want in plain English. They're tireless but need clear direction. That's Cursor.</p>
+    <p style="margin-top: 12px;">Like a real intern, the quality of what they produce depends on the quality of your instructions. This guide will teach you to give <em>great</em> instructions.</p>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">Cursor Architecture — What's Under the Hood</div>
+    <div class="flow-row">
+      <div class="flow-box">Your Project Files</div>
+      <div class="flow-arrow">&#8594;</div>
+      <div class="flow-box alt">Cursor Indexes Everything</div>
+      <div class="flow-arrow">&#8594;</div>
+      <div class="flow-box warm">AI Models (Claude, GPT, Gemini)</div>
+    </div>
+    <div style="margin-top: 16px; font-size: 14px; color: var(--text-light);">
+      Cursor reads your files, builds an index of your codebase, then sends relevant context<br>to powerful AI models. The AI's response is applied directly to your files.
+    </div>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128176;</span> Pricing — What You Need to Know</h3>
+    <table class="comparison-table">
+      <tr><th>Plan</th><th>Price</th><th>Best For</th></tr>
+      <tr><td><strong>Free (Hobby)</strong></td><td>$0/mo</td><td>Trying it out — 2,000 completions, 50 premium requests</td></tr>
+      <tr><td><strong>Pro</strong></td><td>$20/mo</td><td>Individual PMs — unlimited Tab, Agent mode, Background Agents</td></tr>
+      <tr><td><strong>Business</strong></td><td>$40/user/mo</td><td>Teams — centralized billing, admin controls</td></tr>
+    </table>
+    <p style="font-size:14px; color: var(--text-light); margin-top:8px;"><strong>PM recommendation:</strong> Start free. Upgrade to Pro once you're doing anything beyond experiments — the unlimited Tab completions alone are worth it.</p>
+  </div>
+
+  <!-- Quiz -->
+  <div class="card card-exercise">
+    <h3><span class="icon">&#10004;</span> Quick Check: Do You Get It?</h3>
+    <p><strong>What makes Cursor fundamentally different from pasting code into ChatGPT?</strong></p>
+    <div id="quiz1">
+      <button class="quiz-option" onclick="checkQuiz('quiz1', this, false)">A) Cursor uses better AI models</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz1', this, true)">B) Cursor can see and edit your entire codebase directly</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz1', this, false)">C) Cursor is free and ChatGPT isn't</button>
+    </div>
+    <div class="quiz-feedback correct" id="quiz1-correct">That's it. Cursor's superpower is <strong>project-wide context</strong> — the AI doesn't just see a snippet, it understands how your whole project fits together and makes changes across multiple files.</div>
+    <div class="quiz-feedback incorrect" id="quiz1-incorrect">Not quite. While Cursor can use multiple models, the key differentiator is that it lives <em>inside</em> your project and can see + edit all your files directly. Try B.</div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 2: SETUP & FIRST STEPS ═══════════════ -->
+<div class="module" id="module-1">
+  <div class="module-header">
+    <div class="module-number">2</div>
+    <h2>Setup & First Steps</h2>
+    <p>Get Cursor running and learn the landscape</p>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#128295;</span> Exercise 1: Install Cursor</h3>
+    <ul class="checklist" id="setup-checklist">
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Go to <strong>cursor.com</strong> and download for your OS</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Open the installer and follow the prompts</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>When asked, choose <strong>"Import VS Code settings"</strong> if you have VS Code (otherwise skip)</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Sign in with your Google or GitHub account</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>On the model selection screen, select <strong>Claude Sonnet</strong> as your default (best for PM work)</span></li>
+    </ul>
+  </div>
+
+  <div class="diagram">
+    <div class="diagram-title">Cursor Interface Map — What You're Looking At</div>
+    <div style="display: grid; grid-template-columns: 80px 1fr 280px; grid-template-rows: 40px 1fr 36px; gap: 3px; max-width: 700px; margin: 0 auto; height: 340px; font-size: 13px;">
+      <div style="grid-column: 1 / -1; background: #3C3C54; color: white; border-radius: 8px 8px 0 0; display: flex; align-items: center; padding: 0 16px; font-weight: 600;">
+        &#9673; Menu Bar &mdash; File, Edit, View, etc.
+      </div>
+      <div style="background: #2A2A3E; color: #B4B8C8; border-radius: 0 0 0 8px; display: flex; flex-direction: column; align-items: center; padding-top: 16px; gap: 14px; font-size: 18px;">
+        &#128196;<br>&#128269;<br>&#128268;<br>&#128125;
+        <div style="font-size: 10px; margin-top: 8px;">Activity<br>Bar</div>
+      </div>
+      <div style="background: #1E1E2E; color: #CDD6F4; padding: 16px; display: flex; flex-direction: column; gap: 8px;">
+        <div style="font-size: 12px; color: #7F849C; margin-bottom: 4px;">&#11044; index.html &nbsp;&nbsp; &#11044; style.css</div>
+        <div style="font-size: 12px; font-family: monospace; color: #89B4FA;">&lt;div class="app"&gt;</div>
+        <div style="font-size: 12px; font-family: monospace; color: #CDD6F4;">&nbsp;&nbsp;&lt;h1&gt;Hello World&lt;/h1&gt;</div>
+        <div style="font-size: 12px; font-family: monospace; color: #89B4FA;">&lt;/div&gt;</div>
+        <div style="text-align: center; margin-top: auto; font-size: 11px; color: #7F849C;">
+          &#128220; Editor Area<br>This is where your files live
+        </div>
+      </div>
+      <div style="background: #252536; color: #B4B8C8; padding: 16px; border-radius: 0 8px 0 0;">
+        <div style="font-size: 11px; font-weight: 600; color: var(--accent); margin-bottom: 12px;">&#9733; AI CHAT PANEL</div>
+        <div style="font-size: 12px; margin-bottom: 8px; color: #A0A4B8;">This is where you talk to Cursor's AI.</div>
+        <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; font-size: 11px; margin-bottom: 6px;">
+          <span style="color: var(--accent);">You:</span> "Add a login form"
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; font-size: 11px;">
+          <span style="color: var(--primary-light);">AI:</span> "I'll create a login component..."
+        </div>
+      </div>
+      <div style="grid-column: 1 / -1; background: #2A2A3E; color: #7F849C; border-radius: 0 0 8px 8px; display: flex; align-items: center; padding: 0 16px; font-size: 11px;">
+        Status Bar &mdash; branch, errors, AI model info
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128193;</span> Key Concept: Projects = Folders</h3>
+    <p>In Cursor, a <strong>"project"</strong> is just a folder on your computer. When you "open a folder" in Cursor, the AI indexes everything inside it. This is how it understands context.</p>
+    <p><strong>Example:</strong> If you open a folder containing your company's product documentation (PRDs, specs, research notes), Cursor can reference <em>all of it</em> when answering your questions or making edits.</p>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 2: Open Your First Project</h3>
+    <ol>
+      <li>Create a new folder on your Desktop called <code>cursor-training</code></li>
+      <li>Inside it, create a text file called <code>notes.md</code> with a few lines about a product idea</li>
+      <li>In Cursor: <strong>File → Open Folder</strong> → select <code>cursor-training</code></li>
+      <li>You should see your file in the left sidebar (Explorer)</li>
+      <li>Click on <code>notes.md</code> to open it in the editor</li>
+    </ol>
+    <p style="margin-top: 12px;">Congratulations — you have a project open. The AI can now "see" everything in this folder.</p>
+  </div>
+
+  <div class="card card-keyboard">
+    <h3><span class="icon">&#9000;</span> The 5 Shortcuts That Matter (Start Here)</h3>
+    <p style="margin-bottom: 16px; font-size: 14px; color: var(--text-light);">Mac shortcuts shown. Replace <kbd>Cmd</kbd> with <kbd>Ctrl</kbd> on Windows.</p>
+    <div class="shortcut-grid">
+      <div class="shortcut-item"><kbd>Cmd + I</kbd><div class="shortcut-desc"><strong>Composer</strong> — your main AI workspace for multi-file tasks</div></div>
+      <div class="shortcut-item"><kbd>Cmd + L</kbd><div class="shortcut-desc"><strong>Chat</strong> — ask questions about your code or project</div></div>
+      <div class="shortcut-item"><kbd>Cmd + K</kbd><div class="shortcut-desc"><strong>Inline Edit</strong> — quick AI edits right where your cursor is</div></div>
+      <div class="shortcut-item"><kbd>Tab</kbd><div class="shortcut-desc"><strong>Accept</strong> — accept AI's suggestion (the magic key)</div></div>
+      <div class="shortcut-item"><kbd>Cmd + .</kbd><div class="shortcut-desc"><strong>Toggle Agent</strong> — switch Composer to autonomous mode</div></div>
+      <div class="shortcut-item"><kbd>Esc</kbd><div class="shortcut-desc"><strong>Dismiss</strong> — reject AI suggestion and continue</div></div>
+    </div>
+  </div>
+
+  <div class="card card-tip">
+    <h3><span class="icon">&#128161;</span> Pro Tip: Think of Three Zones</h3>
+    <p>Your interaction with Cursor happens in three distinct zones. Knowing which to use when is 80% of the learning curve:</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
+      <div style="background: #F8F6FF; padding: 16px; border-radius: 10px; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 8px;">&#128172;</div>
+        <strong>Chat</strong> (<kbd>Cmd+L</kbd>)<br><span style="font-size: 13px; color: var(--text-light);">Ask questions, get explanations</span>
+      </div>
+      <div style="background: #E8FBF9; padding: 16px; border-radius: 10px; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 8px;">&#127912;</div>
+        <strong>Composer</strong> (<kbd>Cmd+I</kbd>)<br><span style="font-size: 13px; color: var(--text-light);">Build & edit across files</span>
+      </div>
+      <div style="background: #FEF3D0; padding: 16px; border-radius: 10px; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 8px;">&#9889;</div>
+        <strong>Inline</strong> (<kbd>Cmd+K</kbd>)<br><span style="font-size: 13px; color: var(--text-light);">Quick edits at cursor position</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 3: CORE FEATURES ═══════════════ -->
+<div class="module" id="module-2">
+  <div class="module-header">
+    <div class="module-number">3</div>
+    <h2>Core Features Deep Dive</h2>
+    <p>Master the four pillars of Cursor</p>
+  </div>
+
+  <!-- Tab -->
+  <div class="card card-concept">
+    <h3><span class="icon">&#11093;</span> Pillar 1: Tab — Predictive Autocomplete</h3>
+    <p>Tab is Cursor's signature feature. As you type, Cursor predicts not just the next word, but your <em>next edit</em> — sometimes entire blocks of code or text. It watches how you've been editing and anticipates what you'll do next.</p>
+    <p><strong>Example scenario:</strong> You rename a variable in one file. Tab notices and auto-suggests renaming it everywhere else in the file.</p>
+    <p style="margin-top: 8px;"><strong>For PMs:</strong> When you're editing a PRD in markdown, Tab will predict how you'd continue a bullet list, finish a sentence, or structure a section based on the pattern you've started.</p>
+    <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+      <kbd>Tab</kbd> <span style="font-size: 14px;">Accept full suggestion</span>
+      <kbd>Ctrl + &#8594;</kbd> <span style="font-size: 14px;">Accept word-by-word</span>
+      <kbd>Esc</kbd> <span style="font-size: 14px;">Reject</span>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="card card-concept">
+    <h3><span class="icon">&#128172;</span> Pillar 2: Chat — Ask Anything About Your Project</h3>
+    <p>Open with <kbd>Cmd+L</kbd>. Chat is for <em>understanding</em>. Ask questions like you'd ask a senior engineer:</p>
+    <div class="simulator">
+      <div class="simulator-title">Chat Examples — Things PMs Actually Ask</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You:</span>
+        "What does this codebase do? Give me a high-level overview."
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You:</span>
+        "Where is user authentication handled? Walk me through the flow."
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You:</span>
+        "If I wanted to add a dark mode toggle, what files would need to change?"
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You:</span>
+        "Explain this function to me like I'm a product manager, not a developer."
+      </div>
+    </div>
+    <p><strong>Power move:</strong> Use <code>@</code> symbols to give the AI specific context. Type <code>@filename.ts</code> to reference a file, <code>@folder</code> to reference a directory, or <code>@docs</code> to reference Cursor's documentation.</p>
+  </div>
+
+  <!-- Composer -->
+  <div class="card card-concept">
+    <h3><span class="icon">&#127912;</span> Pillar 3: Composer — Build Multi-File Features</h3>
+    <p>Open with <kbd>Cmd+I</kbd>. Composer is for <em>doing</em>. This is where you tell Cursor to create, edit, or restructure files. It can work across your entire project at once.</p>
+    <div class="simulator">
+      <div class="simulator-title">Composer in Action</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You:</span>
+        "Create a simple HTML page with a form that collects a user's name, email, and feedback. Make it look modern with clean CSS."
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label cursor">Cursor:</span>
+        Creating 1 file...<br>
+        &#9679; feedback-form.html — complete HTML page with embedded CSS and form<br><br>
+        <em style="color: #7F849C;">[Shows a diff view of changes — you can Accept or Reject each one]</em>
+      </div>
+    </div>
+    <p><strong>Key concept:</strong> Composer shows you a "diff" (difference view) of every change before applying it. Green lines are additions, red lines are removals. You always approve before anything changes.</p>
+  </div>
+
+  <!-- Agent -->
+  <div class="card card-concept">
+    <h3><span class="icon">&#129302;</span> Pillar 4: Agent Mode — Autonomous AI</h3>
+    <p>Toggle Agent mode with <kbd>Cmd+.</kbd> inside Composer. This is Cursor's most powerful mode — the AI works <em>autonomously</em>, running terminal commands, creating files, fixing errors, and iterating until the task is done.</p>
+    <p><strong>Analogy:</strong> Normal Composer is like texting an engineer one message at a time. Agent mode is like telling them "build the whole feature, come back when it's done."</p>
+    <div style="background: #FFF8F0; border: 1px solid #F0D9B5; border-radius: 10px; padding: 16px; margin-top: 12px;">
+      <p style="font-size: 14px;"><strong>&#9888; When to use Agent vs. Composer:</strong></p>
+      <table class="comparison-table" style="margin-top: 8px;">
+        <tr><th>Use Composer when...</th><th>Use Agent when...</th></tr>
+        <tr><td>You want to review each change</td><td>You want the AI to handle end-to-end</td></tr>
+        <tr><td>Making targeted edits to specific files</td><td>Building something from scratch</td></tr>
+        <tr><td>You're learning what the code does</td><td>You already know what you want built</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 3: Try All Three Zones</h3>
+    <p>Using your <code>cursor-training</code> project from Module 2:</p>
+    <ol>
+      <li><strong>Chat (<kbd>Cmd+L</kbd>):</strong> Ask "What files are in this project and what do they contain?"</li>
+      <li><strong>Composer (<kbd>Cmd+I</kbd>):</strong> Type "Create a file called product-ideas.md with 3 sections: Problem, Solution, Success Metrics. Add placeholder text in each."</li>
+      <li><strong>Inline (<kbd>Cmd+K</kbd>):</strong> Place your cursor on the placeholder text. Press <kbd>Cmd+K</kbd> and type "Replace this with a real example about a mobile food ordering app."</li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-light);">Notice how each zone has a different feel. Chat explains. Composer builds. Inline refines.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 4: PM WORKFLOWS ═══════════════ -->
+<div class="module" id="module-3">
+  <div class="module-header">
+    <div class="module-number">4</div>
+    <h2>PM Workflows in Cursor</h2>
+    <p>Real-world examples of how PMs use Cursor daily</p>
+  </div>
+
+  <div class="card card-example">
+    <h3><span class="icon">&#128203;</span> Workflow 1: Writing PRDs Faster</h3>
+    <p>Cursor can help you draft, iterate, and maintain PRDs by working with your existing docs and research.</p>
+    <div class="simulator">
+      <div class="simulator-title">Example: Drafting a PRD</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You (in Composer):</span>
+        "Create a PRD for a feature called 'Smart Notifications.' Users have complained about notification overload. The solution should use AI to prioritize and batch notifications. Target: mobile app users. Include sections for: Problem Statement, User Stories, Requirements (must-have, nice-to-have), Success Metrics, and Open Questions. Reference @user-research-findings.md for context."
+      </div>
+    </div>
+    <p><strong>Why this beats ChatGPT:</strong> The <code>@user-research-findings.md</code> tag means Cursor reads that file and incorporates its insights. No copy-pasting. No context window limits.</p>
+  </div>
+
+  <div class="card card-example">
+    <h3><span class="icon">&#128269;</span> Workflow 2: Understanding Your Codebase</h3>
+    <p>As a PM, you don't need to write code — but understanding what's built and where things live is a superpower in sprint planning, bug triage, and design reviews.</p>
+    <div class="simulator">
+      <div class="simulator-title">Example: Codebase Exploration</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You (in Chat):</span>
+        "I'm a product manager, not a developer. Give me a tour of this codebase. What are the main features? What are the main folders and what does each one do? What tech stack is being used?"
+      </div>
+      <div class="simulator-prompt" style="margin-top: 16px;">
+        <span class="simulator-label you">Follow-up:</span>
+        "How does the checkout flow work? Walk me through it step by step, focusing on the user experience — not the implementation details."
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-example">
+    <h3><span class="icon">&#128202;</span> Workflow 3: Analyzing User Research</h3>
+    <p>Put multiple research transcripts or CSV exports in your project folder. Then ask Cursor to find patterns.</p>
+    <div class="simulator">
+      <div class="simulator-title">Example: Multi-Document Analysis</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You (in Chat):</span>
+        "I have 8 user interview transcripts in the /research folder. Analyze all of them and give me: the top 5 recurring themes, notable quotes for each theme, and any contradictions between users."
+      </div>
+    </div>
+    <p style="margin-top: 12px;">This is where Cursor <em>really</em> shines over ChatGPT. It reads all 8 files at once without you having to upload each one.</p>
+  </div>
+
+  <div class="card card-example">
+    <h3><span class="icon">&#128221;</span> Workflow 4: Writing Technical Specs</h3>
+    <div class="simulator">
+      <div class="simulator-title">Example: Spec From Codebase</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You (in Chat):</span>
+        "Look at the current authentication system in this codebase. Write a technical spec for adding OAuth2 Google sign-in. Write it at a level where I (a PM) can review it and where our engineers can estimate the work. Include: current state, proposed changes, affected files, rough LOE estimate, and risks."
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-adventure">
+    <h3><span class="icon">&#9968;</span> Adventure 1: The PRD Factory</h3>
+    <p><strong>Mission:</strong> Create a reusable PRD system in Cursor.</p>
+    <ol>
+      <li>Create a folder called <code>prd-templates</code></li>
+      <li>Use Composer to create a file <code>template.md</code> with your ideal PRD structure</li>
+      <li>Create a <code>.cursorrules</code> file in the project root with instructions like: <em>"When asked to write a PRD, always use the structure in prd-templates/template.md. Tone: clear, concise, no jargon. Always include measurable success metrics."</em></li>
+      <li>Test it: Open Composer and say "Write a PRD for adding a dark mode feature to our mobile app"</li>
+      <li>Iterate: Refine the template and rules until the output matches your team's standards</li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--warm-dark);"><strong>Reward:</strong> You now have a personal PRD machine. Every future PRD starts from your standard, customized by AI.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 5: BUILDING THINGS ═══════════════ -->
+<div class="module" id="module-4">
+  <div class="module-header">
+    <div class="module-number">5</div>
+    <h2>Building Things (Yes, You)</h2>
+    <p>Create working prototypes without writing code by hand</p>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128161;</span> The PM Builder Mindset</h3>
+    <p>You don't need to become an engineer. You need to become an <strong>AI director</strong> — someone who can clearly describe what they want and iterate based on what they see. Think of yourself as a film director: you don't hold the camera, but you decide what the audience sees.</p>
+    <p style="margin-top: 8px;">The secret formula is: <strong>Describe → Generate → Review → Refine → Repeat</strong></p>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 4: Build a Landing Page in 5 Minutes</h3>
+    <p><strong>Your prompt (paste this into Composer with Agent mode on):</strong></p>
+    <div class="code-block">
+      <span class="label">Prompt</span>
+Create a single-file HTML landing page for a product called "FocusFlow"
+— an AI-powered task manager for product managers.
+
+Include:
+- A hero section with headline, subheadline, and a CTA button
+- A "How it works" section with 3 steps (icons using emoji)
+- A features grid with 4 features
+- A testimonial quote
+- A footer
+
+Style: Modern, clean, use a purple/indigo color scheme.
+Make it responsive. All CSS should be inline in the same file.
+    </div>
+    <ol style="margin-top: 16px;">
+      <li>Paste the prompt into Composer (<kbd>Cmd+I</kbd>)</li>
+      <li>Make sure Agent mode is on (<kbd>Cmd+.</kbd>)</li>
+      <li>Hit Enter and watch</li>
+      <li>When it's done, right-click the HTML file → "Open in Browser"</li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--text-light);"><strong>Time check:</strong> This should take under 2 minutes. You just built a responsive landing page.</p>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 5: Iterate Like a PM</h3>
+    <p>Now practice the most important PM skill in Cursor — <strong>giving feedback</strong>. Open Composer and try these follow-up prompts:</p>
+    <div class="simulator">
+      <div class="simulator-prompt">
+        <span class="simulator-label you">Iteration 1:</span>
+        "The hero headline is too generic. Change it to 'Stop Managing Tasks. Start Shipping Products.' and make the CTA button say 'Start Free Trial'"
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">Iteration 2:</span>
+        "Add an animated gradient background to the hero section. Subtle, not distracting."
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">Iteration 3:</span>
+        "The features section looks cramped on mobile. Add more padding and stack the grid to single column on small screens."
+      </div>
+    </div>
+    <p style="margin-top: 12px;">Notice: you're giving <em>design feedback</em> in plain English. No CSS knowledge required. This is the PM builder loop.</p>
+  </div>
+
+  <div class="card card-adventure">
+    <h3><span class="icon">&#9968;</span> Adventure 2: Build a Product Dashboard</h3>
+    <p><strong>Mission:</strong> Create an interactive dashboard that displays fake product metrics.</p>
+    <ol>
+      <li>Open Composer in Agent mode</li>
+      <li>Prompt: <em>"Build a single-file React dashboard (JSX) showing product metrics: DAU (12,400, up 8%), retention (72%, down 2%), NPS (67), and feature adoption (4 features with bar chart). Use a clean dark theme. Include a date range selector that doesn't need to actually work — it's for the prototype. Use recharts for the bar chart."</em></li>
+      <li>Review the output, then iterate with feedback</li>
+      <li>Share the result with a colleague — notice their reaction</li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--warm-dark);"><strong>Reward:</strong> You've just built something that usually takes a frontend developer a day. A stakeholder can't tell the difference.</p>
+  </div>
+
+  <div class="card card-adventure">
+    <h3><span class="icon">&#9968;</span> Adventure 3: Image-to-Prototype</h3>
+    <p><strong>Mission:</strong> Turn a screenshot into working code.</p>
+    <ol>
+      <li>Take a screenshot of any web page you admire (or a Figma mockup)</li>
+      <li>Drag the screenshot directly into Cursor's Composer chat</li>
+      <li>Prompt: <em>"Recreate this UI as a single-file HTML page. Match the layout, colors, and typography as closely as possible."</em></li>
+      <li>Open the result in your browser and compare side-by-side</li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--warm-dark);"><strong>Reward:</strong> You now know how to turn <em>any</em> design into a clickable prototype in minutes. This is Cursor's Image-to-Code feature in action.</p>
+  </div>
+
+  <div class="card card-tip">
+    <h3><span class="icon">&#128161;</span> The Art of Good Prompts</h3>
+    <p>The single biggest factor in Cursor output quality is your prompt. Here's a framework:</p>
+    <table class="comparison-table">
+      <tr><th>Element</th><th>Example</th></tr>
+      <tr><td><strong>What</strong> to build</td><td>"A feedback survey form"</td></tr>
+      <tr><td><strong>Who</strong> it's for</td><td>"for mobile users of our SaaS product"</td></tr>
+      <tr><td><strong>How</strong> it should look</td><td>"clean, modern, use our brand blue #2563EB"</td></tr>
+      <tr><td><strong>Constraints</strong></td><td>"single HTML file, no external dependencies"</td></tr>
+      <tr><td><strong>Context</strong></td><td>"reference @existing-styles.css for our design system"</td></tr>
+    </table>
+    <p style="margin-top: 12px;"><strong>Bad prompt:</strong> "Make a form"<br><strong>Good prompt:</strong> "Create a customer feedback form with fields for rating (1-5 stars), category (dropdown: bug, feature request, general), and a text area for details. Include form validation. Style it to match our existing design in @styles.css."</p>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 6: ADVANCED MOVES ═══════════════ -->
+<div class="module" id="module-5">
+  <div class="module-header">
+    <div class="module-number">6</div>
+    <h2>Advanced Moves</h2>
+    <p>Level up with rules, context, and multi-step workflows</p>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128220;</span> .cursorrules — Your AI's Standing Instructions</h3>
+    <p>Create a file called <code>.cursorrules</code> in any project root. This gives the AI permanent instructions that apply to every interaction in that project.</p>
+    <div class="code-block">
+      <span class="label">.cursorrules</span>
+<span class="code-comment"># Project Context</span>
+You are helping a product manager work on a B2B SaaS project.
+The product is a project management tool for small teams.
+
+<span class="code-comment"># Communication Style</span>
+- Explain technical concepts in plain language
+- Always suggest what a PM should look for or ask about
+- When creating documents, use our company tone: professional but warm
+
+<span class="code-comment"># Document Standards</span>
+- PRDs must include: Problem, Users, Solution, Requirements, Metrics
+- All estimates should be in t-shirt sizes (S/M/L/XL)
+- Success metrics must be measurable and time-bound
+
+<span class="code-comment"># Code Standards (for prototypes)</span>
+- Default to single-file HTML for prototypes
+- Use Tailwind CSS classes when possible
+- Always make prototypes responsive
+    </div>
+    <p style="margin-top: 12px;">Think of <code>.cursorrules</code> as onboarding for your AI. The better you onboard it, the less you repeat yourself.</p>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128279;</span> The @ Context System — Point the AI at What Matters</h3>
+    <p>Cursor's most powerful feature for PMs is the <code>@</code> system. It lets you tell the AI exactly what to look at:</p>
+    <table class="comparison-table">
+      <tr><th>Type</th><th>How</th><th>PM Use Case</th></tr>
+      <tr><td><strong>@file</strong></td><td><code>@product-spec.md</code></td><td>"Update this spec based on yesterday's feedback"</td></tr>
+      <tr><td><strong>@folder</strong></td><td><code>@research/</code></td><td>"Analyze all interviews in this folder"</td></tr>
+      <tr><td><strong>@codebase</strong></td><td><code>@codebase</code></td><td>"Where is the payment flow implemented?"</td></tr>
+      <tr><td><strong>@web</strong></td><td><code>@web</code></td><td>"Search for best practices in onboarding flows"</td></tr>
+      <tr><td><strong>@docs</strong></td><td><code>@docs</code></td><td>"How do I use Plan Mode?"</td></tr>
+    </table>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128506;</span> Plan Mode — Think Before Building</h3>
+    <p>For complex tasks, switch Composer to <strong>Plan mode</strong> instead of jumping straight to Agent. Plan mode makes the AI create an editable, step-by-step plan before writing any code.</p>
+    <div class="simulator">
+      <div class="simulator-title">Plan Mode Example</div>
+      <div class="simulator-prompt">
+        <span class="simulator-label you">You (in Composer, Plan mode):</span>
+        "I want to build an internal tool that lets our support team search through customer tickets by keyword, date range, and priority. Plan how you'd build this as a single-page React app."
+      </div>
+      <div class="simulator-prompt">
+        <span class="simulator-label cursor">Cursor (Plan output):</span>
+        &#9745; 1. Create main App component with search bar and filters<br>
+        &#9745; 2. Build TicketCard component for displaying results<br>
+        &#9745; 3. Add mock ticket data (50 tickets with realistic content)<br>
+        &#9745; 4. Implement keyword search with debouncing<br>
+        &#9745; 5. Add date range filter using native date inputs<br>
+        &#9745; 6. Add priority filter (Critical/High/Medium/Low)<br>
+        &#9745; 7. Style with Tailwind, responsive grid layout<br><br>
+        <em style="color: #7F849C;">[You can edit this plan, remove steps, add steps, then execute]</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 6: Create Your .cursorrules</h3>
+    <ol>
+      <li>In your <code>cursor-training</code> project, create a new file: <code>.cursorrules</code></li>
+      <li>Write 5-10 rules that describe how you want the AI to behave. Think about: your role, your company's product, your documentation standards, your preferred tone.</li>
+      <li>Test it: Open Chat and ask a question. Notice if the AI follows your rules.</li>
+      <li>Iterate: Refine the rules based on what the AI gets wrong.</li>
+    </ol>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 7: Multi-File Research Analysis</h3>
+    <ol>
+      <li>Create a folder called <code>research</code> in your project</li>
+      <li>Add 3-4 text files with different user feedback (can be made up — pretend they're interview transcripts)</li>
+      <li>In Chat, type: <em>"Analyze all files in @research/ and create a synthesis document. Group findings into themes, note frequency of each theme, and highlight any contradictions."</em></li>
+      <li>Review the output. Ask follow-up questions.</li>
+    </ol>
+  </div>
+
+  <div class="card card-adventure">
+    <h3><span class="icon">&#9968;</span> Adventure 4: The Spec Reviewer</h3>
+    <p><strong>Mission:</strong> Use Cursor to review your engineering team's work.</p>
+    <ol>
+      <li>Clone (or download) any open-source project from GitHub. A simple one like a to-do app works great. (In Cursor's terminal: <code>git clone [repo-url]</code>)</li>
+      <li>Open the project folder in Cursor</li>
+      <li>In Chat, ask: <em>"I'm the PM for this product. Give me a product overview: what does it do, who is it for, what are the main user flows, and what features are implemented?"</em></li>
+      <li>Follow up: <em>"What are the biggest UX gaps or missing features you can identify?"</em></li>
+      <li>Follow up: <em>"If I wanted to add user onboarding, what would need to change? Give me a rough scope estimate."</em></li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--warm-dark);"><strong>Reward:</strong> You can now walk into sprint planning having independently explored the codebase. You'll ask better questions and make better prioritization decisions.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE 7: AI PM PLAYBOOK ═══════════════ -->
+<div class="module" id="module-6">
+  <div class="module-header">
+    <div class="module-number">7</div>
+    <h2>The AI Product Manager Playbook</h2>
+    <p>Put it all together — developing your practice as an AI PM</p>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#127775;</span> What Makes an AI PM Different?</h3>
+    <p>An AI PM doesn't just use AI tools — they think differently about what's possible. The core shift:</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+      <div style="background: #FFF0F0; padding: 20px; border-radius: 12px;">
+        <div style="font-weight: 700; color: var(--danger); margin-bottom: 8px;">Traditional PM</div>
+        <ul style="font-size: 14px; color: var(--text-light); padding-left: 18px;">
+          <li>"Let me write a PRD and hand it off"</li>
+          <li>"We need to schedule a meeting to scope this"</li>
+          <li>"Can engineering give me an estimate?"</li>
+          <li>"I'll need design to mock this up"</li>
+        </ul>
+      </div>
+      <div style="background: #E6FAF3; padding: 20px; border-radius: 12px;">
+        <div style="font-weight: 700; color: var(--success); margin-bottom: 8px;">AI PM</div>
+        <ul style="font-size: 14px; color: var(--text-light); padding-left: 18px;">
+          <li>"Let me draft the PRD and a working prototype"</li>
+          <li>"I'll explore the codebase and come prepared"</li>
+          <li>"I roughed out the scope — here's what I found"</li>
+          <li>"Here's a clickable mockup, let's react to it"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128197;</span> The AI PM Weekly Practice</h3>
+    <p>Build these habits one at a time. Each one compounds.</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <h4>Week 1-2: The Explorer</h4>
+        <p>Use Chat daily to ask questions about your codebase. Goal: be able to explain your product's architecture at a high level.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>Week 3-4: The Writer</h4>
+        <p>Write all PRDs, specs, and analyses in Cursor using your .cursorrules and @ references. Goal: cut document creation time in half.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>Week 5-6: The Builder</h4>
+        <p>Build a prototype for every major feature you spec. Goal: show stakeholders a clickable demo alongside every PRD.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>Week 7-8: The Reviewer</h4>
+        <p>Use Cursor to review PRs and understand technical trade-offs. Goal: give informed feedback in code reviews.</p>
+      </div>
+      <div class="timeline-item">
+        <h4>Week 9+: The AI PM</h4>
+        <p>Combine all four modes. You explore, write, build, and review — all faster than before. You've changed how you work.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127919;</span> Exercise 8: Build Your PM Toolkit Project</h3>
+    <p>Create a permanent Cursor project that becomes your PM command center:</p>
+    <ul class="checklist" id="toolkit-checklist">
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Create folder: <code>my-pm-toolkit</code></span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Add <code>.cursorrules</code> with your role, product, and standards</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Add folder: <code>/templates</code> — PRD template, spec template, retro template</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Add folder: <code>/research</code> — interview notes, survey results, analytics exports</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Add folder: <code>/prototypes</code> — a place for your Cursor-built demos</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Add folder: <code>/competitive</code> — competitor analyses and market research</span></li>
+      <li onclick="toggleCheck(this)"><div class="check-box">&#10003;</div><span>Test it end-to-end: use Composer to generate a PRD from your template</span></li>
+    </ul>
+  </div>
+
+  <div class="card card-adventure">
+    <h3><span class="icon">&#9968;</span> Adventure 5: The Full Loop</h3>
+    <p><strong>Mission:</strong> Take a real product idea from concept to clickable prototype in one sitting.</p>
+    <ol>
+      <li><strong>Research (15 min):</strong> Put 3-4 competitor screenshots or articles in a <code>/competitive</code> folder. Ask Chat to synthesize the competitive landscape.</li>
+      <li><strong>Spec (15 min):</strong> Use Composer to generate a PRD. Reference your competitive research with <code>@competitive/</code>. Include user stories and success metrics.</li>
+      <li><strong>Build (20 min):</strong> Use Agent mode to build a working HTML prototype of the key user flow. Iterate 3-4 times based on what you see.</li>
+      <li><strong>Review (10 min):</strong> Ask Chat to review your prototype against your PRD. Ask: "Does this prototype cover all the requirements in @prd.md? What's missing?"</li>
+    </ol>
+    <p style="margin-top: 12px; font-size: 14px; color: var(--warm-dark);"><strong>Reward:</strong> You've just completed a workflow that traditionally takes a PM + designer + developer. In under an hour. This is what being an AI PM feels like.</p>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128736;</span> Troubleshooting & Common Pitfalls</h3>
+    <div class="collapsible" onclick="toggleCollapsible(this)">
+      <div class="collapsible-header">"The AI keeps getting things wrong" <span class="collapsible-arrow">&#9660;</span></div>
+      <div class="collapsible-body">
+        <p>The #1 cause is vague prompts. Add more context: reference specific files with <code>@</code>, describe the end user, explain what "good" looks like. If it's still wrong, break the task into smaller steps.</p>
+      </div>
+    </div>
+    <div class="collapsible" onclick="toggleCollapsible(this)">
+      <div class="collapsible-header">"I'm scared I'll break something" <span class="collapsible-arrow">&#9660;</span></div>
+      <div class="collapsible-body">
+        <p>Cursor always shows you a diff before applying changes. You approve every edit. And if something goes wrong, <kbd>Cmd+Z</kbd> (undo) works on every file. For prototyping in your own folder, there's nothing to break.</p>
+      </div>
+    </div>
+    <div class="collapsible" onclick="toggleCollapsible(this)">
+      <div class="collapsible-header">"I don't know what to prompt" <span class="collapsible-arrow">&#9660;</span></div>
+      <div class="collapsible-body">
+        <p>Start with the simplest possible version of what you want. "Create a basic form" is fine. Then iterate. The best prompts come from seeing the first result and knowing what to change — not from writing a perfect prompt on the first try.</p>
+      </div>
+    </div>
+    <div class="collapsible" onclick="toggleCollapsible(this)">
+      <div class="collapsible-header">"The AI uses too many technical terms" <span class="collapsible-arrow">&#9660;</span></div>
+      <div class="collapsible-body">
+        <p>Put this in your <code>.cursorrules</code>: <em>"I am a product manager, not an engineer. Always explain technical concepts in plain language. Use analogies where helpful."</em> Alternatively, just ask in Chat: "Explain that in PM terms."</p>
+      </div>
+    </div>
+    <div class="collapsible" onclick="toggleCollapsible(this)">
+      <div class="collapsible-header">"My free tier ran out of requests" <span class="collapsible-arrow">&#9660;</span></div>
+      <div class="collapsible-body">
+        <p>Free tier gives you 50 premium requests and 2,000 completions per month. If you're finding value, the $20/mo Pro plan is the sweet spot for PMs — unlimited Tab completions and generous Agent usage.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-concept">
+    <h3><span class="icon">&#128218;</span> Quick Reference: Your Cheat Sheet</h3>
+    <table class="comparison-table">
+      <tr><th>I Want To...</th><th>Use This</th><th>Shortcut</th></tr>
+      <tr><td>Ask a question about my project</td><td>Chat</td><td><kbd>Cmd+L</kbd></td></tr>
+      <tr><td>Create or edit files</td><td>Composer</td><td><kbd>Cmd+I</kbd></td></tr>
+      <tr><td>Make a quick inline edit</td><td>Inline Edit</td><td><kbd>Cmd+K</kbd></td></tr>
+      <tr><td>Build something end-to-end</td><td>Agent Mode</td><td><kbd>Cmd+.</kbd> in Composer</td></tr>
+      <tr><td>Plan before building</td><td>Plan Mode</td><td>Select "Plan" in Composer</td></tr>
+      <tr><td>Accept AI suggestion</td><td>Tab</td><td><kbd>Tab</kbd></td></tr>
+      <tr><td>Reference a specific file</td><td>@ symbol</td><td><code>@filename</code></td></tr>
+      <tr><td>Set permanent AI instructions</td><td>.cursorrules file</td><td>Create in project root</td></tr>
+    </table>
+  </div>
+
+  <!-- Final Quiz -->
+  <div class="card card-exercise">
+    <h3><span class="icon">&#127942;</span> Final Check: Are You Ready?</h3>
+
+    <p style="margin-bottom: 16px;"><strong>Q1:</strong> You want Cursor to analyze 5 user interview transcripts in your /research folder. What do you type?</p>
+    <div id="quiz-final-1">
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-1', this, false)">A) Copy-paste all 5 files into the chat</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-1', this, true)">B) In Chat: "Analyze all files in @research/ and summarize the key themes"</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-1', this, false)">C) Open each file one at a time and ask about them separately</button>
+    </div>
+    <div class="quiz-feedback correct" id="quiz-final-1-correct">Exactly. The <code>@folder/</code> syntax tells Cursor to read everything in that directory. One prompt, all files analyzed together.</div>
+    <div class="quiz-feedback incorrect" id="quiz-final-1-incorrect">There's a faster way. Cursor can reference entire folders with the @ symbol — no copy-pasting needed. Try B.</div>
+
+    <p style="margin: 24px 0 16px;"><strong>Q2:</strong> You built a prototype and your VP wants changes. What's the fastest way to iterate?</p>
+    <div id="quiz-final-2">
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-2', this, false)">A) Start over from scratch with a new prompt</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-2', this, false)">B) Manually edit the HTML/CSS yourself</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-2', this, true)">C) Describe the changes in Composer: "Move the CTA above the fold and change the headline to..."</button>
+    </div>
+    <div class="quiz-feedback correct" id="quiz-final-2-correct">The PM builder loop: Describe what you want changed in plain English. Cursor makes the edits. You review. Repeat.</div>
+    <div class="quiz-feedback incorrect" id="quiz-final-2-incorrect">You don't need to start over or edit code manually. The power of Cursor is iterating with natural language. Try C.</div>
+
+    <p style="margin: 24px 0 16px;"><strong>Q3:</strong> What's the purpose of a <code>.cursorrules</code> file?</p>
+    <div id="quiz-final-3">
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-3', this, false)">A) It's required for Cursor to work</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-3', this, true)">B) It gives the AI permanent, project-specific instructions so you don't repeat yourself</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz-final-3', this, false)">C) It stores your API keys securely</button>
+    </div>
+    <div class="quiz-feedback correct" id="quiz-final-3-correct">Right. Think of it as onboarding for your AI assistant. Define your role, standards, and preferences once — they apply to every interaction in that project.</div>
+    <div class="quiz-feedback incorrect" id="quiz-final-3-incorrect">.cursorrules is optional but powerful. It's your way of giving the AI standing instructions — your role, your standards, your preferences. Try B.</div>
+  </div>
+
+  <div class="card" style="background: linear-gradient(135deg, #6C5CE7, #4A3DB5); color: white; text-align: center; padding: 48px 32px;">
+    <h3 style="color: white; font-size: 1.5rem; justify-content: center;">&#127881; You've Completed the Guide</h3>
+    <p style="opacity: 0.9; max-width: 500px; margin: 16px auto 0;">You now have the knowledge and practice exercises to become an AI-native PM. The only thing left is to use Cursor on real work. Start tomorrow.</p>
+    <p style="margin-top: 24px; font-size: 14px; opacity: 0.7;">Remember: the best prompt is the one you iterate on. Start simple, refine constantly.</p>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  <p>Built for Rich &mdash; February 2026</p>
+  <p style="margin-top: 8px; font-size: 12px;">Sources: <a href="https://prismic.io/blog/cursor-ai" style="color: var(--primary);">Prismic Cursor Review</a> · <a href="https://alloy.app/library/cursor-for-pms-complete-guide-ai-product-management" style="color: var(--primary);">Alloy PM Guide</a> · <a href="https://thinkpeak.ai/cursor-keyboard-shortcuts-cheat-sheet-2026/" style="color: var(--primary);">Thinkpeak Shortcuts</a> · <a href="https://techjacksolutions.com/ai/ai-development/cursor-ide-what-it-is/" style="color: var(--primary);">Tech Jacks Guide</a></p>
+</div>
+
+<script>
+// ─── Module Navigation ───
+const modules = document.querySelectorAll('.module');
+const navBtns = document.querySelectorAll('.nav-btn');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+
+function showModule(index) {
+  modules.forEach((m, i) => {
+    m.classList.toggle('active', i === index);
+  });
+  navBtns.forEach((b, i) => {
+    b.classList.toggle('active', i === index);
+  });
+  // Scroll nav button into view
+  navBtns[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  // Update progress
+  const pct = ((index + 1) / modules.length) * 100;
+  progressFill.style.width = pct + '%';
+  progressText.textContent = `Module ${index + 1} of ${modules.length}`;
+  // Scroll to top of content
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── Checklist ───
+function toggleCheck(li) {
+  li.classList.toggle('checked');
+}
+
+// ─── Collapsible ───
+function toggleCollapsible(el) {
+  el.classList.toggle('open');
+}
+
+// ─── Quiz ───
+function checkQuiz(quizId, btn, isCorrect) {
+  const container = document.getElementById(quizId);
+  const options = container.querySelectorAll('.quiz-option');
+  // Disable all options
+  options.forEach(o => {
+    o.disabled = true;
+    o.style.pointerEvents = 'none';
+    o.style.opacity = '0.7';
+  });
+  btn.style.opacity = '1';
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    const fb = document.getElementById(quizId + '-correct');
+    fb.classList.add('show');
+  } else {
+    btn.classList.add('incorrect');
+    const fb = document.getElementById(quizId + '-incorrect');
+    fb.classList.add('show');
+    // Re-enable after a moment so they can try again
+    setTimeout(() => {
+      options.forEach(o => {
+        o.disabled = false;
+        o.style.pointerEvents = 'auto';
+        o.style.opacity = '1';
+        o.classList.remove('incorrect');
+      });
+      fb.classList.remove('show');
+    }, 3000);
+  }
+}
+</script>
+</body>
+</html>
